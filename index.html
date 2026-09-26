@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>💌 Buat Kamu</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Caveat:wght@600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Poppins', -apple-system, sans-serif;
+  overflow: hidden;
+  min-height: 100vh;
+  color: #2a1810;
+  background: #0a0612;
+}
+.bg-fx {
+  position: fixed; inset: 0;
+  background: linear-gradient(180deg, #0a0e2a 0%, #1a1f4a 30%, #3a2a5a 60%, #5a3a5a 85%, #8a5a6a 100%);
+  z-index: 0;
+}
+.bg-fx::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 15% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 15%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 85% 35%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 10%, #fff, transparent),
+    radial-gradient(2px 2px at 55% 25%, #fff, transparent),
+    radial-gradient(1px 1px at 25% 55%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 90% 60%, #fff, transparent),
+    radial-gradient(1px 1px at 10% 75%, #fff, transparent);
+  animation: twinkle 3s ease-in-out infinite alternate;
+  opacity: 0.9;
+}
+@keyframes twinkle { from { opacity: 0.5; } to { opacity: 1; } }
+.bg-fx::after {
+  content: '';
+  position: absolute; top: 8%; right: 12%;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  box-shadow: inset -25px -8px 0 0 #f5e6c8, 0 0 40px rgba(245, 230, 200, 0.4), 0 0 80px rgba(245, 230, 200, 0.2);
+  transform: rotate(-20deg);
+  animation: moonGlow 5s ease-in-out infinite;
+}
+@keyframes moonGlow {
+  0%, 100% { box-shadow: inset -25px -8px 0 0 #f5e6c8, 0 0 40px rgba(245, 230, 200, 0.4), 0 0 80px rgba(245, 230, 200, 0.2); }
+  50% { box-shadow: inset -25px -8px 0 0 #fff4d6, 0 0 60px rgba(245, 230, 200, 0.6), 0 0 120px rgba(245, 230, 200, 0.3); }
+}
+.mosque-silhouette {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 100px; z-index: 1; pointer-events: none; opacity: 0.18;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'><path d='M0,100 L0,70 Q60,50 100,55 L100,35 Q120,20 140,35 L140,55 Q180,50 240,55 L240,45 Q260,25 280,45 L280,55 Q340,50 400,60 L400,40 Q420,20 440,40 L440,60 Q500,55 560,60 L560,45 Q580,25 600,45 L600,60 Q660,55 720,60 L720,40 Q740,20 760,40 L760,60 Q820,55 880,60 L880,45 Q900,25 920,45 L920,60 Q980,55 1040,60 L1040,40 Q1060,20 1080,40 L1080,60 Q1140,55 1200,70 L1200,100 Z' fill='%23d4af78'/></svg>");
+  background-size: cover; background-position: bottom; background-repeat: no-repeat;
+}
+.scene {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: none;
+  justify-content: center; align-items: center; flex-direction: column;
+  z-index: 10; overflow-y: auto; padding: 16px;
+}
+.scene.active { display: flex; }
+.scene-card {
+  position: relative; z-index: 20;
+  background: rgba(255, 250, 240, 0.97);
+  backdrop-filter: blur(20px);
+  padding: 32px 24px;
+  border-radius: 24px;
+  max-width: 94%; width: 540px;
+  border: 1.5px solid rgba(212, 175, 120, 0.5);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.5) inset, 0 0 0 8px rgba(212, 175, 120, 0.08);
+  text-align: center;
+  animation: fadeUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.scene-card::before, .scene-card::after {
+  content: '✦'; position: absolute; color: #d4af78; font-size: 1rem; opacity: 0.6;
+}
+.scene-card::before { top: 14px; left: 18px; }
+.scene-card::after { top: 14px; right: 18px; }
+h1 {
+  font-size: clamp(1.3rem, 5vw, 1.8rem);
+  font-weight: 700; color: #3a2418;
+  margin-bottom: 10px; line-height: 1.35;
+  letter-spacing: -0.3px;
+}
+h1 span {
+  background: linear-gradient(135deg, #c8956a, #a86a4a);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; font-weight: 800;
+}
+p {
+  font-size: clamp(0.9rem, 3.6vw, 1rem);
+  line-height: 1.75; color: #5a4030; margin: 10px 0;
+}
+.arabic {
+  font-family: 'Amiri', serif;
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
+  color: #8a5a3a; direction: rtl;
+  margin: 10px 0; line-height: 2; font-weight: 700;
+}
+.arabic-translation {
+  font-size: 0.82rem; color: #a08060;
+  font-style: italic; margin-top: -6px; margin-bottom: 12px;
+}
+.quote-box {
+  background: linear-gradient(135deg, #fdf5e8, #f5e6d0);
+  border-left: 4px solid #c8956a;
+  border-radius: 12px;
+  padding: 14px 18px; margin: 16px 0;
+  text-align: left; font-size: 0.95rem;
+  color: #5a4030; line-height: 1.7;
+  position: relative; font-style: italic;
+}
+.quote-box::before {
+  content: '❝'; position: absolute; top: -10px; left: 12px;
+  font-size: 1.8rem; color: #c8956a;
+  font-family: 'Caveat', cursive;
+}
+.btn {
+  padding: 12px 30px; margin: 14px 6px 4px;
+  border: none; border-radius: 50px;
+  font-size: clamp(0.88rem, 3.4vw, 1rem);
+  font-weight: 700; cursor: pointer;
+  transition: 0.25s; font-family: inherit;
+  background: linear-gradient(135deg, #c8956a, #a86a4a);
+  color: white;
+  box-shadow: 0 8px 22px rgba(168, 106, 74, 0.4);
+  letter-spacing: 0.3px;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(168, 106, 74, 0.5); }
+.btn:active { transform: translateY(0) scale(0.97); }
+
+/* PHOTO STACK */
+.photo-stack-wrap { position: relative; width: 100%; margin: 18px 0 12px; }
+.photo-stack {
+  position: relative; width: 100%;
+  aspect-ratio: 3 / 2;
+  perspective: 1400px;
+}
+.photo-item {
+  position: absolute; inset: 0;
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 0 4px white, 0 0 0 6px rgba(200, 149, 106, 0.5);
+  transition: transform 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.5s ease, filter 0.5s ease;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  background: #1a0a1e;
+}
+.photo-item img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  user-select: none; -webkit-user-drag: none;
+}
+.photo-item[data-pos="0"] { transform: translateX(0) scale(1) rotate(0deg); opacity: 1; z-index: 5; filter: brightness(1); }
+.photo-item[data-pos="1"] { transform: translateX(20px) translateY(8px) scale(0.94) rotate(2deg); opacity: 0.75; z-index: 4; filter: brightness(0.85) blur(1px); }
+.photo-item[data-pos="2"] { transform: translateX(40px) translateY(16px) scale(0.88) rotate(4deg); opacity: 0.5; z-index: 3; filter: brightness(0.7) blur(2px); }
+.photo-item[data-pos="-1"] { transform: translateX(-100%) scale(0.9) rotate(-8deg); opacity: 0; z-index: 6; pointer-events: none; }
+.photo-item[data-pos="1-left"] { transform: translateX(-20px) translateY(8px) scale(0.94) rotate(-2deg); opacity: 0.75; z-index: 4; filter: brightness(0.85) blur(1px); }
+.photo-item[data-pos="2-left"] { transform: translateX(-40px) translateY(16px) scale(0.88) rotate(-4deg); opacity: 0.5; z-index: 3; filter: brightness(0.7) blur(2px); }
+.photo-item[data-pos="1-right"] { transform: translateX(100%) scale(0.9) rotate(8deg); opacity: 0; z-index: 6; pointer-events: none; }
+.photo-item::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 50%;
+  background: linear-gradient(180deg, transparent 0%, rgba(20, 10, 20, 0.85) 100%);
+  pointer-events: none; opacity: 0; transition: opacity 0.5s ease;
+}
+.photo-item[data-pos="0"]::after { opacity: 1; }
+.photo-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px 18px; z-index: 3;
+  color: white; font-family: 'Caveat', cursive;
+  font-size: clamp(1.15rem, 4.5vw, 1.5rem);
+  line-height: 1.3;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  text-align: left; font-weight: 700;
+  opacity: 0; transform: translateY(20px);
+  transition: 0.5s ease 0.35s;
+  pointer-events: none;
+}
+.photo-item[data-pos="0"] .photo-caption { opacity: 1; transform: translateY(0); }
+.photo-progress {
+  position: absolute; top: 12px; left: 12px; right: 12px;
+  display: flex; gap: 6px; z-index: 4;
+}
+.photo-progress .bar {
+  flex: 1; height: 4px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 10px; overflow: hidden;
+}
+.photo-progress .bar.active .fill { width: 100%; }
+.photo-progress .bar .fill {
+  height: 100%; width: 0;
+  background: white; border-radius: 10px;
+  transition: width 0.4s ease;
+}
+.photo-hint {
+  text-align: center; font-size: 0.8rem;
+  color: #8a6a4a; margin-top: 12px; font-weight: 600;
+  animation: hintPulse 1.8s ease-in-out infinite;
+}
+@keyframes hintPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+.photo-nav { display: flex; justify-content: center; gap: 10px; margin-top: 8px; }
+.photo-nav button {
+  background: rgba(200, 149, 106, 0.15);
+  border: 1.5px solid #c8956a;
+  color: #a86a4a;
+  padding: 8px 18px; border-radius: 50px;
+  font-weight: 700; font-size: 0.85rem;
+  cursor: pointer; font-family: inherit;
+  transition: 0.2s;
+}
+.photo-nav button:hover { background: rgba(200, 149, 106, 0.3); }
+.photo-nav button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* MUSIC CARD */
+.music-card {
+  background: linear-gradient(135deg, #c8956a, #8a5a3a);
+  color: white;
+  padding: 16px 18px;
+  border-radius: 16px;
+  margin: 18px 0 12px;
+  display: flex; align-items: center; gap: 14px;
+  text-align: left;
+  box-shadow: 0 12px 30px rgba(138, 90, 58, 0.4);
+  position: relative; overflow: hidden;
+}
+.music-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+.vinyl {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: radial-gradient(circle, #f5e6c8 0%, #f5e6c8 18%, #3a2418 20%, #3a2418 100%);
+  display: flex; align-items: center; justify-content: center;
+  animation: spin 4s linear infinite;
+  flex-shrink: 0; position: relative; z-index: 1;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.vinyl::after {
+  content: ''; width: 8px; height: 8px;
+  border-radius: 50%; background: #c8956a;
+}
+.music-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+.music-info .title { font-size: 1rem; font-weight: 700; margin-bottom: 3px; }
+.music-info .sub { font-size: 0.8rem; opacity: 0.9; }
+
+/* ANIMASI */
+.float-icon {
+  position: fixed; pointer-events: none; z-index: 99;
+  animation: floatUp 6s ease-in forwards;
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0.4) rotate(0deg); opacity: 0; }
+  15% { opacity: 0.85; }
+  85% { opacity: 0.85; }
+  100% { transform: translateY(-20vh) scale(1.1) rotate(25deg); opacity: 0; }
+}
+.ripple-effect {
+  position: fixed; border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 149, 106, 0.4) 0%, transparent 70%);
+  pointer-events: none;
+  animation: rippleOut 1.2s ease-out forwards;
+  z-index: 98;
+}
+@keyframes rippleOut { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(20); opacity: 0; } }
+
+.scene::-webkit-scrollbar { display: none; }
+
+@media (max-width: 500px) {
+  .scene-card { padding: 24px 16px; }
+  .bg-fx::after { width: 60px; height: 60px; }
+  .mosque-silhouette { height: 70px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-fx"></div>
+<div class="mosque-silhouette"></div>
+
+<!-- SCENE 1 -->
+<div class="scene active" id="s1">
+  <div class="scene-card">
+    <h1>Assalamu'alaikum, <span>{{nama}}</span> 🌙</h1>
+    <p>Semoga kamu selalu dalam lindungan-Nya, ya.<br>
+    Aku bikin sesuatu buat kamu, kecil-kecilan aja.</p>
+    <p style="font-size:0.85rem; color:#8a6a4a; margin-top:12px;">
+      Santai aja, dinikmatin ya 😊
+    </p>
+    <button class="btn" data-next="2">Mulai 👉</button>
+  </div>
+</div>
+
+<!-- SCENE 2 - FOTO -->
+<div class="scene" id="s2">
+  <div class="scene-card">
+    <h1>Ada 3 Foto Buat Kamu</h1>
+    <p style="font-size:0.85rem; margin-bottom:4px;">Tap atau swipe buat ganti 😊</p>
+    <div class="photo-stack-wrap">
+      <div class="photo-stack" id="photoStack"></div>
+    </div>
+    <div class="photo-nav">
+      <button id="prevPhoto">‹ Sebelumnya</button>
+      <button id="nextPhoto">Selanjutnya ›</button>
+    </div>
+    <div class="photo-hint" id="photoHint">
+      👆 Swipe / tap di fotonya
+    </div>
+    <button class="btn" id="nextAfterPhotos" data-next="3" style="display:none;">
+      Lanjut →
+    </button>
+  </div>
+</div>
+
+<!-- SCENE 3 -->
+<div class="scene" id="s3">
+  <div class="scene-card">
+    <h1>Jujur Aja, <span>{{nama}}</span> 💛</h1>
+    <p>
+      Aku <strong style="color:#a86a4a;">sayang banget</strong> sama kamu.<br>
+      Jauh ini berat, tapi aku gak pernah nyesel milih kamu.
+    </p>
+    <div class="quote-box">
+      "Kita beda tempat, tapi langit kita sama.<br>
+      Doa kita juga nyampe ke atas yang sama."
+    </div>
+    <p style="font-size:0.9rem; color:#8a6a4a;">
+      Aku serius sama kamu, dan aku gak main-main. 🤍
+    </p>
+    <button class="btn" data-next="4">Lanjut 👉</button>
+  </div>
+</div>
+
+<!-- SCENE 4 -->
+<div class="scene" id="s4">
+  <div class="scene-card">
+    <h1>Doa Aku Buat Kamu 🤲</h1>
+    <div class="arabic">اللَّهُمَّ بَارِكْ لَهَا وَاحْفَظْهَا</div>
+    <div class="arabic-translation">"Ya Allah, berkahilah dia dan jagalah dia"</div>
+    <p>
+      Semoga kamu selalu sehat, bahagia,<br>
+      dan semua urusanmu dimudahkan.
+    </p>
+    <div class="quote-box">
+      Kalau nanti waktunya tiba,<br>
+      insyaAllah kita ketemu di keadaan yang lebih baik.
+    </div>
+    <p style="font-size:0.88rem; color:#8a6a4a;">
+      Sampai saat itu, aku tunggu sambil perbaiki diri. 🤍
+    </p>
+    <button class="btn" data-next="5">Lanjut 👉</button>
+  </div>
+</div>
+
+<!-- SCENE 5 - ENDING -->
+<div class="scene" id="s5">
+  <div class="scene-card">
+    <h1>Buat <span>{{nama}}</span> 💌</h1>
+    <p>
+      Aku gak bisa janjiin selalu ada di setiap saat,<br>
+      tapi aku bisa janjiin: aku bakal tetap ada.
+    </p>
+    <div class="music-card">
+      <div class="vinyl"></div>
+      <div class="music-info">
+        <div class="title">Surat Cinta untuk Starla</div>
+        <div class="sub">— Virgoun</div>
+      </div>
+    </div>
+    <p style="font-style:italic; color:#8a6a4a; font-size:0.92rem;">
+      "Kalau lagu itu buat Starla,<br>
+      versi aku ya buat kamu."
+    </p>
+    <p style="margin-top:14px;">
+      Percaya sama aku, ya. Percaya sama kita.<br>
+      Langit kita sama, cuma beda tempat aja. 💫<br><br>
+      Ayo jalanin bareng, dengan niat baik & hati yang bersih. 🤝
+    </p>
+  </div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  
+  // ============================================================
+  // ==================  GANTI DI SINI  =========================
+  // ============================================================
+  var nama = "Khaulah";
+  
+  var fotoList = [
+    { src: "foto1.jpg", pesan: "Tatapan kamu tuh candu. Beneran. 😳" },
+    { src: "foto2.jpg", pesan: "kalo ngeliat kamu kaya ngeliat masa depan hehe" },
+    { src: "foto3.jpg", pesan: "So cutee dehh 🥺" }
+  ];
+  // ============================================================
+
+  // ===== REPLACE NAMA =====
+  var cards = document.querySelectorAll('.scene-card');
+  for (var k = 0; k < cards.length; k++) {
+    cards[k].innerHTML = cards[k].innerHTML.replace(/\{\{nama\}\}/g, nama);
+  }
+
+  // ===== FUNGSI NAVIGASI =====
+  function nextScene(num) {
+    var scenes = document.querySelectorAll('.scene');
+    for (var i = 0; i < scenes.length; i++) scenes[i].classList.remove('active');
+    var target = document.getElementById('s' + num);
+    if (target) {
+      target.classList.add('active');
+      spawnRipple();
+      spawnFloats(5);
+      window.scrollTo(0, 0);
+    }
+  }
+
+  // ===== ANIMASI =====
+  function spawnFloats(count) {
+    count = count || 4;
+    for (var i = 0; i < count; i++) {
+      var f = document.createElement('div');
+      f.className = 'float-icon';
+      var items = ['✨', '⭐', '🌙', '💫', '🌟', '🤍', '💌'];
+      f.innerHTML = items[Math.floor(Math.random() * items.length)];
+      f.style.left = Math.random() * 100 + '%';
+      f.style.fontSize = (Math.random() * 18 + 16) + 'px';
+      f.style.animationDuration = (Math.random() * 2 + 4) + 's';
+      f.style.animationDelay = (Math.random() * 2) + 's';
+      document.body.appendChild(f);
+      setTimeout((function(el) { return function() { el.remove(); }; })(f), 6500);
+    }
+  }
+  function spawnRipple(x, y) {
+    var r = document.createElement('div');
+    r.className = 'ripple-effect';
+    r.style.left = (x || window.innerWidth / 2) - 50 + 'px';
+    r.style.top = (y || window.innerHeight / 2) - 50 + 'px';
+    r.style.width = '100px';
+    r.style.height = '100px';
+    document.body.appendChild(r);
+    setTimeout(function() { r.remove(); }, 1200);
+  }
+
+  // ===== PASANG EVENT KE SEMUA TOMBOL "data-next" =====
+  var navButtons = document.querySelectorAll('[data-next]');
+  for (var n = 0; n < navButtons.length; n++) {
+    (function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = parseInt(btn.getAttribute('data-next'), 10);
+        nextScene(target);
+      });
+    })(navButtons[n]);
+  }
+
+  // ===== PHOTO STACK =====
+  var photoStack = document.getElementById('photoStack');
+  var nextAfterPhotos = document.getElementById('nextAfterPhotos');
+  var photoHint = document.getElementById('photoHint');
+  var prevBtn = document.getElementById('prevPhoto');
+  var nextBtn = document.getElementById('nextPhoto');
+
+  var currentPhoto = 0;
+  var photoViewed = {};
+  var totalPhotos = fotoList.length;
+
+  // Build semua photo-item
+  for (var p = 0; p < fotoList.length; p++) {
+    (function(item, i) {
+      var div = document.createElement('div');
+      div.className = 'photo-item';
+      div.dataset.index = i;
+      
+      var progressBars = '';
+      for (var j = 0; j < fotoList.length; j++) {
+        progressBars += '<div class="bar ' + (j <= i ? 'active' : '') + '"><div class="fill"></div></div>';
+      }
+      
+      div.innerHTML = 
+        '<img src="' + item.src + '" alt="foto ' + (i + 1) + '">' +
+        '<div class="photo-caption">' + item.pesan + '</div>' +
+        '<div class="photo-progress">' + progressBars + '</div>';
+      
+      var img = div.querySelector('img');
+      img.onerror = function() {
+        this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect width=%22600%22 height=%22400%22 fill=%22%231a2a5a%22/%3E%3Ctext x=%22300%22 y=%22200%22 font-size=%2270%22 text-anchor=%22middle%22 dy=%22.35em%22 fill=%22%23c8956a%22%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E';
+      };
+      photoStack.appendChild(div);
+    })(fotoList[p], p);
+  }
+
+  function updateStack(newIndex, oldIndex) {
+    var items = photoStack.querySelectorAll('.photo-item');
+    var goingForward = newIndex > oldIndex;
+    
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      item.removeAttribute('data-pos');
+      
+      if (i === newIndex) {
+        item.dataset.pos = '0';
+        item.style.pointerEvents = 'auto';
+        item.style.zIndex = '5';
+      } else if (goingForward) {
+        if (i > newIndex) {
+          var offset = i - newIndex;
+          item.dataset.pos = offset === 1 ? '1' : '2';
+          item.style.pointerEvents = 'none';
+        } else {
+          item.dataset.pos = '-1';
+          item.style.pointerEvents = 'none';
+        }
+      } else {
+        if (i < newIndex) {
+          var offset2 = newIndex - i;
+          item.dataset.pos = offset2 === 1 ? '1-left' : '2-left';
+          item.style.pointerEvents = 'none';
+        } else {
+          item.dataset.pos = '1-right';
+          item.style.pointerEvents = 'none';
+        }
+      }
+      
+      var bars = item.querySelectorAll('.bar');
+      for (var b = 0; b < bars.length; b++) {
+        if (b <= newIndex) bars[b].classList.add('active');
+        else bars[b].classList.remove('active');
+      }
+    }
+    
+    if (prevBtn) prevBtn.disabled = newIndex === 0;
+    if (nextBtn) nextBtn.disabled = newIndex === totalPhotos - 1;
+    
+    if (photoHint) {
+      if (newIndex === 0) photoHint.innerHTML = '👉 Geser ke kiri atau tap "Selanjutnya"';
+      else if (newIndex === totalPhotos - 1) photoHint.innerHTML = '👈 Geser ke kanan buat balik';
+      else photoHint.innerHTML = '👈 👉 Bisa geser kiri kanan';
+    }
+  }
+
+  function nextPhoto() {
+    if (currentPhoto < totalPhotos - 1) {
+      var old = currentPhoto;
+      currentPhoto++;
+      updateStack(currentPhoto, old);
+      spawnRipple();
+      markViewed(currentPhoto);
+    }
+  }
+  function prevPhoto() {
+    if (currentPhoto > 0) {
+      var old = currentPhoto;
+      currentPhoto--;
+      updateStack(currentPhoto, old);
+      spawnRipple();
+      markViewed(currentPhoto);
+    }
+  }
+
+  function markViewed(idx) {
+    photoViewed[idx] = true;
+    var count = 0;
+    for (var key in photoViewed) if (photoViewed[key]) count++;
+    if (count === totalPhotos) {
+      setTimeout(function() {
+        if (nextAfterPhotos) nextAfterPhotos.style.display = 'inline-block';
+        if (photoHint) photoHint.style.display = 'none';
+      }, 600);
+    }
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', prevPhoto);
+  if (nextBtn) nextBtn.addEventListener('click', nextPhoto);
+
+  // Observer scene 2
+  var photoObserver = new MutationObserver(function() {
+    var s2 = document.getElementById('s2');
+    if (s2.classList.contains('active')) {
+      currentPhoto = 0;
+      photoViewed = {};
+      photoViewed[0] = true;
+      if (nextAfterPhotos) nextAfterPhotos.style.display = 'none';
+      if (photoHint) photoHint.style.display = 'block';
+      var items = photoStack.querySelectorAll('.photo-item');
+      for (var i = 0; i < items.length; i++) items[i].removeAttribute('data-pos');
+      setTimeout(function() { updateStack(0, -1); }, 50);
+    }
+  });
+  photoObserver.observe(document.getElementById('s2'), { attributes: true, attributeFilter: ['class'] });
+
+  // Swipe
+  var touchStartX = 0, touchStartY = 0, touchMoved = false;
+  photoStack.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchMoved = false;
+  }, { passive: true });
+  photoStack.addEventListener('touchmove', function() { touchMoved = true; }, { passive: true });
+  photoStack.addEventListener('touchend', function(e) {
+    if (!touchMoved) return;
+    var diffX = e.changedTouches[0].clientX - touchStartX;
+    var diffY = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) nextPhoto();
+      else prevPhoto();
+    }
+  }, { passive: true });
+  photoStack.addEventListener('click', function(e) {
+    if (touchMoved) return;
+    var rect = photoStack.getBoundingClientRect();
+    if ((e.clientX - rect.left) > rect.width / 2) nextPhoto();
+    else prevPhoto();
+  });
+
+  // ===== INIT =====
+  spawnFloats(12);
+  setInterval(function() { if (Math.random() > 0.65) spawnFloats(1); }, 3500);
+
+  // ===== MUSIK =====
+  var audio = new Audio();
+  audio.src = "musik.mp3";
+  audio.loop = true;
+  audio.volume = 0.3;
+  var played = false;
+  document.body.addEventListener('click', function() {
+    if (!played) { audio.play().catch(function(){}); played = true; }
+  });
+  document.body.addEventListener('touchstart', function() {
+    if (!played) { audio.play().catch(function(){}); played = true; }
+  });
+  
+});
+</script>
+</body>
+</html>
